@@ -8,16 +8,18 @@
 '''
 
 import random
+import datetime
 
 def main():
 
     res_one = school_library_query()
     res_user = user_query(res_one["school_id"])
     res_book = book_query(res_one["school_id"]) 
-    res_reserv = reservations(res_one["school_id"], res_book["isbn"], res_user["user_id"], res_one["bucket_admin_id"])
+    res_reserv = book_system_live(res_one["school_id"], res_book["isbn"], res_user["user_id"], res_one["bucket_admin_id"])
     res_creds = credentials(res_user["user_id"])
     res_rev = reviews(res_user["user_id"], res_book["isbn"])
     res_reg = registrations(res_one["school_id"])
+    res_rsv = reservations(res_one["school_id"], res_book["isbn"], res_user["user_id"])
 
     with open("data.sql", "w") as file:
         file.write("USE Library;\n\n")
@@ -37,7 +39,7 @@ def main():
         file.write("".join(res_book["b2"]))
         file.write("".join(res_book["b3"]))
 
-        file.write("\n-- Reservations Tables\n\n")
+        file.write("\n-- Book_System_Live Tables\n\n")
         file.write("".join(res_reserv["r1"]))
 
         file.write("\n-- Credentials Tables\n\n")
@@ -48,6 +50,11 @@ def main():
 
         file.write("\n-- Registration Table\n\n")
         file.write("".join(res_reg["reg1"]))
+
+        file.write("\n-- Reservation Table\n\n")
+        file.write("".join(res_rsv["rsv_q"]))
+
+
 
     
 
@@ -160,7 +167,7 @@ def user_query(s_bucket : list) -> dict:
         id = "USR-" + gen_num_seq(5)
         firstname = random.choice(random_firstnames) 
         lastname = random.choice(random_lastnames)
-        total_books_borrowed = 0
+        total_books_borrowed = random.randint(0,50)
         academic_id = "WN-" + "".join([random.choice("1234567890") for i in range(5)])
 
         if academic_id not in track_academic_id:
@@ -266,7 +273,7 @@ def credentials(user_id_bucket : list) -> dict:
         tmp_password = gen_alphabet_seq(5) + "-" + gen_num_seq(4)
 
         if creds_id not in creds_id_track:
-            creds_tb.append("INSERT INTO Credentials VALUES ('{0}','{1}','{2}','{3}');\n".format(creds_id, user_id_bucket[usr_index], tmp_username, tmp_password))
+            creds_tb.append("INSERT INTO Credentials VALUES ('{0}','{1}','{2}');\n".format(user_id_bucket[usr_index], tmp_username, tmp_password))
             creds_id_track.append(creds_id)
             usr_index += 1
 
@@ -311,50 +318,51 @@ def registrations(sId_bucket : list) -> dict:
         tmp_firstname = random.choice(firstnames_pool)
         tmp_lastname = random.choice(lastnames_pool)
         tmp_academic_id = "WN-" + gen_num_seq(5)
-        reg_status = 0
+        reg_status = "pending"
         tmp_reg_usernmame = random.choice(username_bucket) + "_" + gen_num_seq(4)
         tmp_reg_password = gen_alphabet_seq(5) + "_" + gen_num_seq(5)
+        tmp_reg_email = tmp_firstname.lower() + "_" + tmp_lastname.lower() + gen_num_seq(2) + "@gmail.com"
 
         if rg_id not in register_id_bucket and tmp_academic_id not in academic_id_track:
             register_id_bucket.append(rg_id)
             academic_id_track.append(tmp_academic_id)
 
-            registrations_tb.append("INSERT INTO Registrations VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}');\n".format(rg_id, random.choice(sId_bucket), tmp_firstname, tmp_lastname, age, tmp_academic_id, reg_status, user_role, tmp_reg_usernmame, tmp_reg_password))
+            registrations_tb.append("INSERT INTO Registrations VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}');\n".format(rg_id, random.choice(sId_bucket), tmp_firstname, tmp_lastname, age, tmp_academic_id, reg_status, user_role, tmp_reg_usernmame, tmp_reg_password, tmp_reg_email))
 
     print(" [+] Done")
 
     return {"rg_id" : register_id_bucket, "reg1" : registrations_tb}
 
-def reservations(sId_bucket : list, isbn_bucket : list, user_id_bucket : list, admin_id_bucket : list) -> dict:
+def book_system_live(sId_bucket : list, isbn_bucket : list, user_id_bucket : list, admin_id_bucket : list) -> dict:
 
     '''
-        Creates Random Reservations
+        Creates Random Book_Live_System
 
         Returns a dictionary with the following structure
 
-        reserv_id : list with given reservation id
+        book_system_live_id : list with given reservation id
         r1 : queries for Reservations Table
     '''
 
-    print(" [+] Generating Reservations_* dummy data")
+    print(" [+] Generating Book_System_Live_* dummy data")
 
     rn = "0123456789"
 
-    reservations_tb = []
-    resv_id_bucket = []
+    bsl_tb = []
+    bsl_id_bucket = []
     user_id_used = []
 
-    while len(reservations_tb) != 50:
+    while len(bsl_tb) != 50:
         late_days = 0
-        reserv_id = "RS-" + "".join([random.choice(rn) for i in range(5)])
+        bsl_id = "BSL-" + "".join([random.choice(rn) for i in range(5)])
         random_user = random.choice(user_id_bucket)
 
-        if reserv_id not in resv_id_bucket and random_user not in user_id_used:
-            reservations_tb.append("INSERT INTO Reservations(Reservations_id,School_Library_id,ISBN,User_id,Admin_id,Late_Days) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}');\n".format(reserv_id,random.choice(sId_bucket),random.choice(isbn_bucket), random_user, random.choice(admin_id_bucket),late_days))
+        if bsl_id not in bsl_id_bucket and random_user not in user_id_used:
+            bsl_tb.append("INSERT INTO Book_System_Live(Book_System_Live_id,School_Library_id,ISBN,User_id,Admin_id,Late_Days,Rent_Active) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}');\n".format(bsl_id,random.choice(sId_bucket),random.choice(isbn_bucket), random_user, random.choice(admin_id_bucket),late_days,random.randint(0,1)))
 
     print(" [+] Done")
 
-    return {"reserv_id" : resv_id_bucket, "r1" : reservations_tb}
+    return {"bsl_id" : bsl_id_bucket, "r1" : bsl_tb}
 
 def reviews(user_id_bucket : list, isbn_bucket : list) -> dict:
 
@@ -386,6 +394,37 @@ def reviews(user_id_bucket : list, isbn_bucket : list) -> dict:
     print(" [+] Done")
 
     return {"rv_id" : track_rv_id, "rv1" : review_tb}
+
+
+def reservations(sId_bucket : list, isbn_bucket : list, user_id_bucket : list) -> dict:
+
+    '''
+        Return a dict with the following structure:
+
+        rsv1 : list with rsv1 id
+        rsv_q : list with queries for Reservations Table
+    '''
+
+    print(" [+] Generating Reservations_* dummy data")
+
+    rsv_tb = []
+    rsv1 = []
+
+    while len(rsv_tb) != 40:
+        id ="RSV-" + gen_num_seq(5)
+        sc = random.choice(sId_bucket)
+        user_id = random.choice(user_id_bucket)
+        isbn = random.choice(isbn_bucket)
+        rs_date = datetime.datetime.now().__str__().split(" ")[0]
+        rs_status = random.randint(0,1)
+
+        if id not in rsv1:
+            rsv1.append(id)
+            rsv_tb.append("INSERT INTO Reservations VALUES('{0}','{1}','{2}','{3}','{4}','{5}');\n".format(id,sc,user_id,isbn,rs_date,rs_status))
+
+    print(" [+] Done")
+
+    return {"rsv1" : rsv1, "rsv_q" : rsv_tb}
 
 
 def gen_num_seq(x : int) -> str:
