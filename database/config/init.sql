@@ -101,7 +101,7 @@ CREATE TABLE Registrations (
     Lastname VARCHAR(255) NOT NULL,
     Age INT NOT NULL,
     Academic_id VARCHAR(255) NOT NULL,
-    Registration_Status VARCHAR(100),
+    Registration_Status VARCHAR(100) DEFAULT 'pending',
     User_Role VARCHAR(255) NOT NULL,
     Reg_Username VARCHAR(255) UNIQUE NOT NULL,
     Reg_Password VARCHAR(255) UNIQUE NOT NULL,
