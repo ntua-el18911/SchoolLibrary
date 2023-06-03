@@ -1,16 +1,17 @@
+import AdminBookDelays from "@/Components/AdminBookDelays";
 import MenuBarAdmin from "@/Components/MenuBarAdmin";
 import { useRouter } from "next/router";
 
-function Registrations() {
+function Reservations() {
     
     const router = useRouter();
     
     return (
         <div>
             <MenuBarAdmin page={router.pathname} />
-            Registrations
+            <AdminBookDelays />
         </div>
     )
 }
 
-export default Registrations;
+export default Reservations;

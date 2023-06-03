@@ -1,10 +1,10 @@
 import Link from "next/link"
+import Cookies from "js-cookie";
 
 export default function MenuBarAdmin({page}) {
 
-
     return (
-        <nav className={"bg-white w-full border-b-2 border-black"}>
+        <nav className={"bg-white w-full border-b-2 border-black sticky top-0"}>
 
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
@@ -61,7 +61,39 @@ export default function MenuBarAdmin({page}) {
                         </Link>
                     }
 
-                    {page === "/admin/signout" &&  
+                    {page === "/admin/reviews" &&  
+                        <Link
+                            href={"/admin/reviews"}
+                            className="bg-black text-white px-3 py-2 text-sm font-medium">
+                                Reviews
+                        </Link>
+                    }
+
+                    {page !== "/admin/reviews" &&  
+                        <Link
+                            href={"/admin/reviews"}
+                            className="bg-white hover:text-black text-black px-3 py-2 text-sm font-medium">
+                                Reviews
+                        </Link>
+                    }
+
+                    {page === "/admin/delays" &&  
+                        <Link
+                            href={"/admin/delays"}
+                            className="bg-black text-white px-3 py-2 text-sm font-medium">
+                                Delays
+                        </Link>
+                    }
+
+                    {page !== "/admin/delays" &&  
+                        <Link
+                            href={"/admin/delays"}
+                            className="bg-white hover:text-black text-black px-3 py-2 text-sm font-medium">
+                                Delays
+                        </Link>
+                    }
+
+                    {page === "/admin/signout" && 
                         <Link
                             href={"/"}
                             className="bg-white hover:text-black text-black px-3 py-2 text-sm font-medium">
@@ -69,7 +101,7 @@ export default function MenuBarAdmin({page}) {
                         </Link>
                     }
 
-                    {page !== "/signout" &&  
+                    {page !== "/signout" && 
                         <Link
                             href={"/"}
                             className="bg-white hover:text-black text-black px-3 py-2 text-sm font-medium">

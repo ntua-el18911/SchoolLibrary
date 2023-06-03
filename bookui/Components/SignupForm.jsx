@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Notification from "./Notification";
 
 function SignupForm() {
 
@@ -11,6 +12,10 @@ function SignupForm() {
     const [role,setRole] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [schoolId,setSchoolId] = useState("");
+    const [schools,setSchools] = useState([]);
+    const [notify,setNotify] = useState(false);
+    const [errorNotification,setErrorNotification] = useState(false);
 
     function handleChangeFirstname(event) {
         setFirstname(event.target.value);
@@ -36,6 +41,10 @@ function SignupForm() {
         setRole(event.target.value);
     }
 
+    function handleChangeSchoolId(event) {
+        setSchoolId(event.target.value);
+    }
+
     function handleChangeUsername(event) {
         setUsername(event.target.value);
     }
@@ -45,12 +54,70 @@ function SignupForm() {
     }
     
     async function handleClick() {
-        
+        const url = "http://localhost:9000/api/signup";
+
+        //TODO verify fields
+
+        const new_user = {
+            school_id : schoolId,
+            firstname : firstname,
+            lastname : lastname,
+            age : age,
+            email, email,
+            academic_id : academicID,
+            role : role,
+            username : username,
+            password : password
+        }
+
+        try {
+            const response = await fetch(url, {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify(new_user)
+            })
+
+            if (response.status === 200) {
+                setNotify(true);
+            }
+        } catch(error) {
+            console.error(error);
+            setErrorNotification(true);
+        }
     }
 
-    return (
-        <div className="box-border h-auto w-96 border-2 border-black rounded mx-auto mt-16 p-8 shadow-xl">
+    async function getSchools() {
+        
+        const url = "http://localhost:9000/api/schools";
+        
+        try{
+            const response = await fetch(url, {
+                method : "GET",
+                headers: {
+                    "Content-Type" : "application/json"
+                }
+            });
 
+            const sc = await response.json();
+            setSchools(sc.data);
+        } catch(error) {
+            console.error(error);
+            setErrorNotification(true);
+        }
+    }
+
+    useEffect(() => {
+        getSchools();
+    },[]);
+
+    return (
+        <div className="box-border h-auto w-2/5 border-2 border-black rounded mx-auto mt-8 p-8 shadow-xl">
+            
+            {notify && <Notification notificationTitle={"Request Success"} notificationMsg={"You will be notified with an email when your registration is approved"} notificationInfo={"success"} setVisibleNotification={setNotify}/>}
+            {errorNotification && <Notification notificationTitle={"Request Failure"} notificationMsg={"Your request contains errors, fix them to proceed."} notificationInfo={"errors"} setVisibleNotification={setErrorNotification}/>}
+            
             <h1 className="text-center text-xl mb-4">Sign Up For SchoolLibrary</h1>
 
             <input 
@@ -88,9 +155,19 @@ function SignupForm() {
                 onChange={handleChangeEmail}
             />
 
-            <select className="block w-full px-4 py-2 rounded-md border-2 border-black focus:outline-none hover:cursor-pointer bg-white mb-4" defaultValue={"student"}>
+            <select className="block w-full px-4 py-2 rounded-md border-2 border-black focus:outline-none hover:cursor-pointer bg-white mb-4"
+                    onChange={handleChangeRole}>
+                <option value={"default"} selected>Select Your Role</option>
                 <option value={"student"}>Student</option>
                 <option value={"instructor"}>Instructor</option>
+            </select>
+
+            <select className="block w-full px-4 py-2 rounded-md border-2 border-black focus:outline-none hover:cursor-pointer bg-white mb-4"
+                    onChange={handleChangeSchoolId}>
+                <option value={"default"} selected>Select Your School</option>
+                {schools.map((data) => {
+                    return <option key={data.id} value={data.id}>{data.name}</option>
+                })}
             </select>
 
             <input 

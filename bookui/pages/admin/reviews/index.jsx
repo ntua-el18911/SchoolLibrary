@@ -1,16 +1,17 @@
+import AdminReviewStats from "@/Components/AdminReviewStats";
 import MenuBarAdmin from "@/Components/MenuBarAdmin";
 import { useRouter } from "next/router";
 
-function Registrations() {
+function AdminReviews() {
     
     const router = useRouter();
-    
+
     return (
         <div>
             <MenuBarAdmin page={router.pathname} />
-            Registrations
-        </div>
+            <AdminReviewStats />
+        </div>    
     )
 }
 
-export default Registrations;
+export default AdminReviews;

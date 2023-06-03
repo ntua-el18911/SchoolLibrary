@@ -1,9 +1,15 @@
-import DashboardAdmin from "@/Components/DashboardAdmin";
+import MenuBarAdmin from "@/Components/MenuBarAdmin";
+import ReservationAdmin from "@/Components/ReservationAdmin";
+import { useRouter } from "next/router";
 
 function Reservations() {
+    
+    const router = useRouter();
+    
     return (
         <div>
-            <DashboardAdmin />
+            <MenuBarAdmin page={router.pathname} />
+            <ReservationAdmin />
         </div>
     )
 }
