@@ -1,0 +1,21 @@
+{
+  "name": "bookserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev" : "nodemon index.js",
+    "start" : "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.3",
+    "express": "^4.18.2",
+    "figlet": "^1.6.0",
+    "mysql2": "^3.3.3",
+    "nodemon": "^2.0.22"
+  }
+}
