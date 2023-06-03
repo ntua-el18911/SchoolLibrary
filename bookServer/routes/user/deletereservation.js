@@ -16,7 +16,7 @@ function getReservation(req,res,next) {
 
     const reservation_id = req.body.reservation_id;
 
-    //TODO check body
+    //TODO Check Request Body 
 
     connection.query("DELETE FROM Reservations WHERE Reservations_id=?",[reservation_id], 
     (error,results) => {
