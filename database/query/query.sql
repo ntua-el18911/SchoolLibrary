@@ -102,11 +102,17 @@ FROM Reviews
     INNER JOIN Users U on Reviews.User_id = U.User_id
     INNER JOIN Books B on Reviews.ISBN = B.ISBN
     INNER JOIN Book_Categories BC on B.ISBN = BC.ISBN
-        WHERE BC.Category = 'Fiction' AND U.User_id='USR-16635'
+        WHERE BC.Category = 'Fiction'
 GROUP BY U.User_id, U.Firstname, U.Lastname, BC.Category;
 
 
 -- 3.3
+
+
+SELECT B.ISBN,B.Title,Academic_id,U.Firstname,U.Lastname,Start_Date,End_Date,Late_Days FROM Book_System_Live
+INNER JOIN Users U on Book_System_Live.User_id = U.User_id
+INNER JOIN Books B on Book_System_Live.ISBN = B.ISBN
+WHERE Late_Days > 0 AND Rent_Active=1;
 
     -- 3.3.1
 
@@ -138,4 +144,17 @@ FROM
 INNER JOIN Book_System_Live R on Books.ISBN = R.ISBN
 INNER JOIN Users U on R.User_id = U.User_id 
     WHERE U.User_id = 'USR-69923';
+
+
+SELECT CONCAT(Firstname,' ',Lastname) AS Authors FROM Book_Authors;
+
+SELECT DISTINCT Category FROM Book_Categories;
+
+SELECT DISTINCT SL.School_Library_id,B.ISBN,B.Title, GROUP_CONCAT(DISTINCT Category) AS Book_Category,CONCAT(BA.Firstname,' ',BA.Lastname) AS Author, SL.School_Name, B.Publisher, B.Page_Number, B.Copies FROM Book_Categories
+INNER JOIN Books B on Book_Categories.ISBN = B.ISBN
+INNER JOIN School_Library SL on B.School_Library_id = SL.School_Library_id
+INNER JOIN Book_Authors BA on B.ISBN = BA.ISBN
+GROUP BY SL.School_Library_id,B.ISBN, B.Title, CONCAT(BA.Firstname,' ',BA.Lastname), SL.School_Name, B.Publisher, B.Page_Number, B.Copies;
+
+SELECT User_id, Firstname, Lastname, User_Role AS Role, Available_Borrows AS Available, Total_Books_Borrowed AS TOTAL FROM Users;
 

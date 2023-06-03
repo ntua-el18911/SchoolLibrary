@@ -104,7 +104,7 @@ CREATE TABLE Registrations (
     Registration_Status VARCHAR(100) DEFAULT 'pending',
     User_Role VARCHAR(255) NOT NULL,
     Reg_Username VARCHAR(255) UNIQUE NOT NULL,
-    Reg_Password VARCHAR(255) UNIQUE NOT NULL,
+    Reg_Password VARCHAR(255) NOT NULL,
     Reg_Email VARCHAR(255) NOT NULL,
 
     FOREIGN KEY (School_Library_id) REFERENCES School_Library(School_Library_id)
@@ -254,6 +254,11 @@ CREATE TRIGGER book_return AFTER UPDATE ON Book_System_Live FOR EACH ROW
             END IF;
         END;
 
+CREATE TRIGGER new_book_reservation AFTER INSERT ON Reservations FOR EACH ROW
+    BEGIN
+        UPDATE Books SET Copies = Copies - 1 WHERE Books.ISBN=NEW.ISBN;
+    END;
+
 -- Create Events
 
 CREATE EVENT IF NOT EXISTS book_delay
@@ -285,4 +290,15 @@ CREATE EVENT IF NOT EXISTS clear_rejected_registrations
     BEGIN
         DELETE FROM Registrations WHERE Registration_Status = 'rejected' OR Registration_Status = 'approved';
     END;
+
+-- VIEWS
+
+CREATE VIEW registrations_username AS
+    SELECT Registration_id, Reg_Username FROM Registrations;
+
+CREATE VIEW credential_username AS
+    SELECT Cr_Username FROM Credentials;
+
+CREATE VIEW schools AS
+    SELECT School_Library_id,School_Name FROM School_Library;
 
