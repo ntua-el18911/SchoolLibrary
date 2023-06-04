@@ -38,3 +38,5 @@ next-env.d.ts
 
 /bookServer/node_modules
 .env
+
+/database/query/test.sql
