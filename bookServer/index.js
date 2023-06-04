@@ -24,6 +24,12 @@ const cancel_reservation = require("./routes/user/deletereservation.js");
 const admin_reservations = require("./routes/admin/allreservations.js");
 const admin_delays = require("./routes/admin/bookdelays.js");
 const admin_review_stats = require("./routes/admin/getstats.js");
+const admin_registrations = require("./routes/admin/allregistrations.js");
+const admin_update_registration = require("./routes/admin/updateregistration.js");
+const admin_add_book = require("./routes/admin/addbook.js");
+const admin_delete_reservation = require("./routes/admin/deletereservation.js");
+const admin_live_system = require("./routes/admin/getlivesystem.js");
+const book_return = require("./routes/admin/bookreturn.js");
 
 app.use("/", sign_in);
 app.use("/", sign_up);
@@ -40,6 +46,12 @@ app.use("/", admin_reservations);
 app.use("/", admin_delays);
 app.use("/", admin_review_stats);
 app.use("/", cancel_reservation);
+app.use("/", admin_registrations);
+app.use("/", admin_update_registration);
+app.use("/", admin_add_book);
+app.use("/", admin_delete_reservation);
+app.use("/", admin_live_system);
+app.use("/", book_return);
 
 app.listen(process.env.PORT, () => {
     figlet("BookServer", function (error, data) {

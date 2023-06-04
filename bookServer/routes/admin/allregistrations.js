@@ -3,7 +3,7 @@ const router = express.Router();
 const mysql = require("mysql2");
 require("dotenv").config();
 
-function getAllReservation(req,res,next) {
+function getRegistrations(req,res,next) {
 
     res.type("application/json");
 
@@ -14,10 +14,8 @@ function getAllReservation(req,res,next) {
         database : process.env.DB_DATABASE
     });
 
-    connection.query("SELECT Reservations_id,U.User_id,U.School_Library_id,Reservations.ISBN,Title,Reservation_Date AS Date,U.Firstname,U.Lastname FROM Reservations" + 
-    " INNER JOIN Books B ON Reservations.ISBN = B.ISBN" +
-    " INNER JOIN Users U ON Reservations.User_id = U.User_id"+
-    " WHERE Reservation_status=1", 
+    connection.query("SELECT Registration_id,Firstname,Lastname,Age,User_Role,Academic_id,Registration_Status FROM Registrations" + 
+    " WHERE Registration_Status=?",["pending"], 
     (error,results) => {
         if (error) {
             console.error(error);
@@ -30,13 +28,13 @@ function getAllReservation(req,res,next) {
             if (results.length === 0) {
                 res.status(404).json(
                     {
-                        "info" : "no reservations were found"
+                        "info" : "no registrations found"
                     }
                 );
             } else {
                 res.status(200).json(
                     {
-                        "reservations" : results
+                        "registrations" : results
                     }
                 );
             }
@@ -47,5 +45,5 @@ function getAllReservation(req,res,next) {
 
 }
 
-router.get("/api/admin/reservations", getAllReservation);
+router.get("/api/admin/registrations", getRegistrations);
 module.exports=router;
