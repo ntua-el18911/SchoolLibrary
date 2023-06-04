@@ -43,7 +43,8 @@ function AdminBookDelays() {
 
     function handleSearch() {
         setFilteredBookDelays(bookDelays.filter(item=>{
-            return item.Firstname === Firstname || item.Lastname === Lastname || item.Late_Days === parseInt(lateDays);
+
+            return (item.Firstname === Firstname && item.Lastname === Lastname) || item.Late_Days === parseInt(lateDays);
         }));
     }
 
@@ -54,7 +55,6 @@ function AdminBookDelays() {
     return (
         <div className="pl-4 flex justify-center space-x-4">
             <div>
-                <h1 className="text-center text-2xl mt-2">Admin Book Delays</h1>
                 {notificationError && <Notification notificationTitle={"Book Delays Load Failure"} notificationMsg={"An Unexpected Error Occured while loading book delays."} notificationInfo={"errors"} setVisibleNotification={setNotificationError}/>}
             
                 {
@@ -80,9 +80,9 @@ function AdminBookDelays() {
                                 <tbody>
 
                                     { 
-                                        filteredBookDelays.map(item => {
+                                        filteredBookDelays.map((item,index) => {
                                             return (
-                                                <tr key={item.ISBN} data-key={item.ISBN}>
+                                                <tr key={index} data-key={item.ISBN}>
                                                     <td className={"border p-2 border-black"}>{item.ISBN}</td>
                                                     <td className={"border p-2 border-black"}>{item.Title}</td>
                                                     <td className={"border p-2 border-black"}>{item.Academic_id}</td>
@@ -98,7 +98,7 @@ function AdminBookDelays() {
                             </tbody>
                     </table>}
                 </div>
-                <div className="box-border h-fit w-fit border-2 border-black rounded mt-14 p-8 shadow-xl mt-24">
+                <div className="box-border h-fit w-fit border-2 border-black rounded mt-14 p-8 shadow-xl mt-24 sticky top-0 bg-gray-50">
                     <h1 className="text-center text-xl mb-4">Search </h1>
                     <input 
                         type="text" 

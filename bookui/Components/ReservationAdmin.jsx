@@ -9,6 +9,11 @@ function UserReservations() {
     const [user,setUser] = useState();
     const [notificationError,setNotificationError] = useState(false);
     const [nothingFound,setNothingFound] = useState(false);
+    const [addSuccessNotification,setAddSuccessNotification] = useState(false);
+    const [addFailNotification,setAddFailNotification] = useState(false);
+    const [denySuccessNotification,setDenySuccessNotification] = useState(false);
+    const [denyFailNotification,setDenyFailNotification] = useState(false);
+    const [addRemoveNotification,setAddRemoveNotification] = useState(false);
 
     async function fetchReservations() {
 
@@ -42,12 +47,99 @@ function UserReservations() {
         }
     }
 
-    function handleApprove() {
-        alert("clicked");
+    async function handleApprove(event) {
+
+        const schoool_id = event.currentTarget.parentNode.getAttribute("data-sid");
+        const isbn = event.currentTarget.parentNode.getAttribute("data-isbn");
+        const user_id = event.currentTarget.parentNode.getAttribute("data-uid");
+        const reservation_id = event.currentTarget.parentNode.getAttribute("data-rid"); 
+
+        const url_add = "http://localhost:9000/api/admin/addbook"
+        const url_remove_reservation = "http://localhost:9000/api/admin/deletereservation";
+
+        const params_add = {
+            school_id: schoool_id,
+            isbn: isbn,
+            user_id: user_id,
+            admin_id: user.Admin_id 
+        }
+
+        const params_remove = {
+            id : reservation_id
+        }
+
+        try {
+            const res = await fetch(url_add, {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify(params_add)
+            })
+
+            if (res.status !== 200) {
+                setAddFailNotification(true);
+                return;
+            }
+        } catch(error) {
+            setAddFailNotification(true);
+            return;
+        }
+
+        try {
+            const res_delete = await fetch(url_remove_reservation, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(params_remove)
+            });
+
+            if (res_delete.status === 200) {
+                setAddSuccessNotification(true);
+                setReservations(reservations.filter(item => {
+                    return item.Reservations_id !== reservation_id
+                }));
+            } else {
+                setAddRemoveNotification(true);
+            }
+
+        } catch(error) {
+            console.log(error);
+            setAddRemoveNotification(true);
+        }
     }
 
-    function handleDeny() {
-        //TODO
+    async function handleDeny(event) {
+       
+        const reservation_id = event.currentTarget.parentNode.getAttribute("data-rid"); 
+
+        const url_remove_reservation = "http://localhost:9000/api/admin/deletereservation";
+
+        const params_remove = {
+            id : reservation_id
+        }
+
+        try {
+            const res_delete = await fetch(url_remove_reservation, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(params_remove)
+            });
+
+            if (res_delete.status === 200) {
+                setDenySuccessNotification(true);
+                setReservations(reservations.filter(item => {
+                    return item.Reservations_id !== reservation_id
+                }));
+            } 
+
+        } catch(error) {
+            console.log(error);
+            setDenyFailNotification(true);
+        }
     }
 
     useEffect(() => {
@@ -55,11 +147,15 @@ function UserReservations() {
     },[]);
 
     return (
-        <div className="pl-4">
+        <div className="pl-4 flex justify-center">
 
-            <h1 className="text-center text-2xl mt-2">Admin Reservations</h1>
             {notificationError && <Notification notificationTitle={"Reservations Load Failure"} notificationMsg={"An Unexpected Error Occured while loading  reservations."} notificationInfo={"errors"} setVisibleNotification={setNotificationError}/>}
-            
+            {addSuccessNotification && <Notification notificationTitle={"Reservation Approved"} notificationMsg={"Reservation has been successfully approved."} notificationInfo={"success"} setVisibleNotification={setAddSuccessNotification}/>}
+            {addFailNotification && <Notification notificationTitle={"Reservations Failed To Approve"} notificationMsg={"An Unexpected Error Occured while approving reservation."} notificationInfo={"errors"} setVisibleNotification={setAddFailNotification}/>}
+            {denySuccessNotification && <Notification notificationTitle={"Reservations Rejected Successfully"} notificationMsg={"Reservation has been rejected successfully."} notificationInfo={"success"} setVisibleNotification={setDenySuccessNotification}/>}
+            {denyFailNotification && <Notification notificationTitle={"Reservations Rejection Failure"} notificationMsg={"An Unexpected Error Occured while rejecting reservation."} notificationInfo={"errors"} setVisibleNotification={setDenyFailNotification}/>}
+            {addRemoveNotification && <Notification notificationTitle={"Reservation Remove Failure"} notificationMsg={"Reservation has been approved but couldn't be deleted."} notificationInfo={"errors"} setVisibleNotification={setAddRemoveNotification}/>}
+
             {
                 nothingFound && 
                     <p className="text-lg text-center">No reservations were found.</p>
@@ -70,6 +166,7 @@ function UserReservations() {
                     <caption className={"caption-top mb-2 text-lg font-medium"}>Reservations</caption>
                         <thead>
                             <tr className={"bg-white"}>
+                                <th className={"border p-4 border-black"}>Index</th>
                                 <th className={"border p-4 border-black"}>ISBN</th>
                                 <th className={"border p-4 border-black"}>Title</th>
                                 <th className={"border p-4 border-black"}>Date</th>
@@ -82,16 +179,21 @@ function UserReservations() {
                             <tbody>
 
                                 { 
-                                    reservations.map(item => {
+                                    reservations !== undefined && reservations.map((item,index) => {
                                         return (
-                                            <tr key={item.ISBN} data-key={item.ISBN}>
+                                            <tr key={index} data-key={item.ISBN}>
+                                                <td className={"border p-2 border-black"}>{index+1}</td>
                                                 <td className={"border p-2 border-black"}>{item.ISBN}</td>
-                                                <td className={"border p-2 border-black hover:cursor-pointer"}>{item.Title}</td>
+                                                <td className={"border p-2 border-black"}>{item.Title}</td>
                                                 <td className={"border p-2 border-black"}>{item.Date.split("T")[0]}</td>
                                                 <td className={"border p-2 border-black"}>{item.Firstname}</td>
                                                 <td className={"border p-2 border-black"}>{item.Lastname}</td>
                                                 <td className={"border p-2 border-black"}>Pending</td> 
-                                                <td className={"border p-2 border-black flex justify-center"}>
+                                                <td className={"border p-2 border-black flex justify-center"}
+                                                    data-isbn={item.ISBN}
+                                                    data-sid={item.School_Library_id}
+                                                    data-rid={item.Reservations_id}
+                                                    data-uid={item.User_id}>
                                                     <span 
                                                         className="hover:cursor-pointer"
                                                         onClick={handleApprove}>

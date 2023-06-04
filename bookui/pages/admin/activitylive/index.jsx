@@ -1,17 +1,17 @@
-import AdminRegistration from "@/Components/AdminRegistrations";
+import AdminLiveSystem from "@/Components/AdminLiveSystem";
 import MenuBarAdmin from "@/Components/MenuBarAdmin";
 import { useRouter } from "next/router";
 
-function Registrations() {
-    
+function ActivityLive() {
+
     const router = useRouter();
-    
+
     return (
         <div>
             <MenuBarAdmin page={router.pathname} />
-            <AdminRegistration />
+            <AdminLiveSystem />
         </div>
     )
 }
 
-export default Registrations;
+export default ActivityLive;

@@ -82,7 +82,7 @@ function UserReservations() {
     },[]);
 
     return (
-        <div className="pl-4">
+        <div className="pl-4 flex justify-center">
             {notificationError && <Notification notificationTitle={"Reservations Load Failure"} notificationMsg={"An Unexpected Error Occured while loading  reservations."} notificationInfo={"errors"} setVisibleNotification={setNotificationError}/>}
             {deleteNotificationError && <Notification notificationTitle={"Reservation Cancel Failure"} notificationMsg={"An Unexpected Error Occured while cancelling your reservation."} notificationInfo={"errors"} setVisibleNotification={setDeleteNotificationError}/>}
             {successNotification && <Notification notificationTitle={"Reservation Canceled Successfully"} notificationMsg={"Your reservation has been successfully canceled"} notificationInfo={"success"} setVisibleNotification={setSuccessNotification}/>}
@@ -98,6 +98,7 @@ function UserReservations() {
                     <caption className={"caption-top mb-2 text-lg font-medium"}>Reservations</caption>
                         <thead>
                             <tr className={"bg-white"}>
+                                <th className={"border p-4 border-black"}>Index</th>
                                 <th className={"border p-4 border-black"}>ISBN</th>
                                 <th className={"border p-4 border-black"}>Title</th>
                                 <th className={"border p-4 border-black"}>Date</th>
@@ -108,9 +109,10 @@ function UserReservations() {
                             <tbody>
 
                                 { 
-                                    reservations.map(item => {
+                                    reservations !== undefined && reservations.map((item,index) => {
                                         return (
                                             <tr key={item.ISBN}>
+                                                <td className={"border p-2 border-black"}>{index+1}</td>
                                                 <td className={"border p-2 border-black"}>{item.ISBN}</td>
                                                 <td className={"border p-2 border-black hover:cursor-pointer"}>{item.Title}</td>
                                                 <td className={"border p-2 border-black"}>{item.Date.split("T")[0]}</td>

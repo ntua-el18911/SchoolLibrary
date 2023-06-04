@@ -49,12 +49,12 @@ function BooksHistory() {
     },[]);
 
     return (
-        <div className="pl-4">
+        <div className="pl-4 flex justify-center">
             {notificationError && <Notification notificationTitle={"Failed to load your Books"} notificationMsg={"An Unexpected Error Occured while loading your books."} notificationInfo={"errors"} setVisibleNotification={setNotificationError}/>}
             
             {
                 nothingFound && 
-                    <p className="text-lg text-center">No active book borrows were found.</p>
+                    <p className="text-lg text-center">No active book history found.</p>
             }
 
             {nothingFound===false &&
@@ -62,6 +62,7 @@ function BooksHistory() {
                     <caption className={"caption-top mb-2 text-lg font-medium"}>Books History</caption>
                         <thead>
                             <tr className={"bg-white"}>
+                                <th className={"border p-4 border-black"}>Index</th>
                                 <th className={"border p-4 border-black"}>ISBN</th>
                                 <th className={"border p-4 border-black"}>Title</th>
                                 <th className={"border p-4 border-black"}>Firstname</th>
@@ -73,9 +74,10 @@ function BooksHistory() {
                             <tbody>
 
                                 { 
-                                    booksHistoryBucket.map(item => {
+                                    booksHistoryBucket!==undefined && booksHistoryBucket.map((item,index) => {
                                         return (
                                             <tr key={item.ISBN}>
+                                                <td className={"border p-2 border-black"}>{index+1}</td>
                                                 <td className={"border p-2 border-black"}>{item.ISBN}</td>
                                                 <td className={"border p-2 border-black hover:cursor-pointer"}>{item.Title}</td>
                                                 <td className={"border p-2 border-black"}>{item.Firstname}</td>

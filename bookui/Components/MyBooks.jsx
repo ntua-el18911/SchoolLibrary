@@ -49,7 +49,7 @@ function MyBooks() {
     },[]);
 
     return (
-        <div className="pl-4">
+        <div className="pl-4 flex justify-center">
             {notificationError && <Notification notificationTitle={"Failed to load your Books"} notificationMsg={"An Unexpected Error Occured while loading your books."} notificationInfo={"errors"} setVisibleNotification={setNotificationError}/>}
             
             {
@@ -62,6 +62,7 @@ function MyBooks() {
                     <caption className={"caption-top mb-2 text-lg font-medium"}>Books Activity</caption>
                         <thead>
                             <tr className={"bg-white"}>
+                                <th className={"border p-4 border-black"}>Index</th>
                                 <th className={"border p-4 border-black"}>ISBN</th>
                                 <th className={"border p-4 border-black"}>Title</th>
                                 <th className={"border p-4 border-black"}>Start Date</th>
@@ -72,9 +73,10 @@ function MyBooks() {
                             <tbody>
 
                                 { 
-                                    liveBooks.map(item => {
+                                    liveBooks !== undefined && liveBooks.map((item,index) => {
                                         return (
                                             <tr key={item.ISBN}>
+                                                <td className={"border p-2 border-black"}>{index+1}</td>
                                                 <td className={"border p-2 border-black"}>{item.ISBN}</td>
                                                 <td className={"border p-2 border-black hover:cursor-pointer"}>{item.Title}</td>
                                                 <td className={"border p-2 border-black"}>{item.Start_Date.split("T")[0]}</td>

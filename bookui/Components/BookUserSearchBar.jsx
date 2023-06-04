@@ -49,10 +49,11 @@ function BookUserSearchBar({books, setFilteredBooks}) {
     }
 
     function handleSearch() {
-        const pattern = new RegExp("\\b" + searchTitle + "\\b", "i")
+        const pattern = new RegExp("\\b" + searchTitle + "\\b", "i");
+        const category_pattern = new RegExp("\\b" + selectedCategory + "\\b");
 
         setFilteredBooks(books.filter(item => {
-            return item.Author === selectedAuthor || item.Book_Category === selectedCategory || pattern.test(item.Title)
+            return item.Author === selectedAuthor || category_pattern.test(item.Book_Category) || pattern.test(item.Title)
         }));
     }
 

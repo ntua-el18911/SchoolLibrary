@@ -64,9 +64,9 @@ function AdminBookTable ({user}) {
                         <tbody>
 
                             {
-                                selectedBooks.map(item => {
+                                selectedBooks.map((item,index) => {
                                     return (
-                                        <tr key={item.ISBN} sc={item.School_Library_id} isbn={item.ISBN} tl={item.Title}>
+                                        <tr key={index} sc={item.School_Library_id} isbn={item.ISBN} tl={item.Title}>
                                             <td className={"border p-2 border-black"}>{item.ISBN}</td>
                                             <td className={"border p-2 border-black"}>{item.Title}</td>
                                             <td className={"border p-2 border-black"}>{item.Book_Category}</td>

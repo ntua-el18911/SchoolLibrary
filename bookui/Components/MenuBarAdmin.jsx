@@ -29,6 +29,22 @@ export default function MenuBarAdmin({page}) {
                         </Link>
                     }
 
+                    {page === "/admin/activitylive" &&  
+                        <Link
+                            href={"/admin/activitylive"}
+                            className="bg-black text-white px-3 py-2 text-sm font-medium">
+                                Book Activity Live
+                        </Link>
+                    }
+
+                    {page !== "/admin/activitylive" &&  
+                        <Link
+                            href={"/admin/activitylive"}
+                            className="bg-white hover:text-black text-black px-3 py-2 text-sm font-medium">
+                                Book Activity Live
+                        </Link>
+                    }
+
                     {page === "/admin/reservations" &&  
                         <Link
                             href={"/admin/reservations"}

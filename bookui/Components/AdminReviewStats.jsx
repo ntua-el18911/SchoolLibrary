@@ -79,7 +79,6 @@ function AdminReviewStats() {
     return (
         <div className="flex justify-center space-x-4">
             <div className="pl-4">
-                <h1 className="text-center text-2xl mt-2">Admin Review Stats</h1>
                 {notificationError && <Notification notificationTitle={"Book Reviews Load Failure"} notificationMsg={"An Unexpected Error Occured while loading book review stats."} notificationInfo={"errors"} setVisibleNotification={setNotificationError}/>}
             
                 {
@@ -92,6 +91,7 @@ function AdminReviewStats() {
                     <caption className={"caption-top mb-2 text-lg font-medium"}>Review Stats</caption>
                         <thead>
                             <tr className={"bg-white"}>
+                                <th className={"border p-4 border-black"}>Index</th>
                                 <th className={"border p-4 border-black"}>ID</th>
                                 <th className={"border p-4 border-black"}>Firstname</th>
                                 <th className={"border p-4 border-black"}>Lastname</th>
@@ -105,6 +105,7 @@ function AdminReviewStats() {
                                     filterReviewStats.map((item,index) => {
                                         return (
                                             <tr key={index}>
+                                                <td className={"border p-2 border-black"}>{index+1}</td>
                                                 <td className={"border p-2 border-black"}>{item.User_id}</td>
                                                 <td className={"border p-2 border-black"}>{item.Firstname}</td>
                                                 <td className={"border p-2 border-black"}>{item.Lastname}</td>
