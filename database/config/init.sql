@@ -284,8 +284,8 @@ CREATE EVENT IF NOT EXISTS auto_cancel_reservations
             SET Reservation_status = 0 WHERE Reservation_Date < CURRENT_DATE;
     END;
 
-CREATE EVENT IF NOT EXISTS clear_rejected_registrations
-    ON SCHEDULE EVERY 1 DAY
+CREATE EVENT IF NOT EXISTS clear_registrations
+    ON SCHEDULE EVERY 1 MINUTE
     DO
     BEGIN
         DELETE FROM Registrations WHERE Registration_Status = 'rejected' OR Registration_Status = 'approved';
