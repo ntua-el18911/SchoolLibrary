@@ -353,7 +353,7 @@ def book_system_live(sId_bucket : list, isbn_bucket : list, user_id_bucket : lis
     user_id_used = []
 
     while len(bsl_tb) != 50:
-        late_days = 0
+        late_days = random.randint(0,5)
         bsl_id = "BSL-" + "".join([random.choice(rn) for i in range(5)])
         random_user = random.choice(user_id_bucket)
 

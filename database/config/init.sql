@@ -262,7 +262,7 @@ CREATE TRIGGER new_book_reservation AFTER INSERT ON Reservations FOR EACH ROW
 -- Create Events
 
 CREATE EVENT IF NOT EXISTS book_delay
-    ON SCHEDULE EVERY 1 MINUTE
+    ON SCHEDULE EVERY 1 DAY
     DO
     BEGIN
        UPDATE Book_System_Live
@@ -270,14 +270,14 @@ CREATE EVENT IF NOT EXISTS book_delay
     END;
 
 CREATE EVENT IF NOT EXISTS clear_reservations
-    ON SCHEDULE EVERY 1 MINUTE
+    ON SCHEDULE EVERY 1 DAY
     DO
     BEGIN
         DELETE FROM Reservations WHERE Reservation_status = '0';
     END;
 
 CREATE EVENT IF NOT EXISTS auto_cancel_reservations
-    ON SCHEDULE EVERY 1 MINUTE
+    ON SCHEDULE EVERY 1 DAY
     DO
     BEGIN
         UPDATE Reservations
@@ -285,7 +285,7 @@ CREATE EVENT IF NOT EXISTS auto_cancel_reservations
     END;
 
 CREATE EVENT IF NOT EXISTS clear_rejected_registrations
-    ON SCHEDULE EVERY 1 MINUTE
+    ON SCHEDULE EVERY 1 DAY
     DO
     BEGIN
         DELETE FROM Registrations WHERE Registration_Status = 'rejected' OR Registration_Status = 'approved';

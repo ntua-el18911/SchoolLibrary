@@ -14,7 +14,7 @@ INSERT INTO School_Library_Email VALUES ('East_School#1491@pubschool.com', 'SC-1
 INSERT INTO School_Library_Email VALUES ('East_School#1686@pubschool.com', 'SC-44053');
 INSERT INTO School_Library_Email VALUES ('East_School#2739@pubschool.com', 'SC-24226');
 INSERT INTO School_Library_Email VALUES ('North_School#1574@pubschool.com', 'SC-88947');
-INSERT INTO School_Library_Admins VALUES ('ADM-12520','SC-14453','John','Black','admin_erkqp','pzvia89172');
+INSERT INTO School_Library_Admins VALUES ('ADM-12520','SC-14453','John','Black','admin','password');
 INSERT INTO School_Library_Admins VALUES ('ADM-73248','SC-44053','John','Orange','admin_wgqba','burmv14768');
 INSERT INTO School_Library_Admins VALUES ('ADM-27032','SC-24226','Kate','Black','admin_juvhq','icztx72404');
 INSERT INTO School_Library_Admins VALUES ('ADM-95455','SC-88947','Josh','Black','admin_yyzpg','tueqi89560');
@@ -580,7 +580,7 @@ INSERT INTO Book_System_Live(Book_System_Live_id,School_Library_id,ISBN,User_id,
 
 -- Credentials Tables
 
-INSERT INTO Credentials VALUES ('USR-73775','lucas_8770','sklkb-9477');
+INSERT INTO Credentials VALUES ('USR-73775','lisa','password');
 INSERT INTO Credentials VALUES ('USR-94479','william_1474','njqpr-9150');
 INSERT INTO Credentials VALUES ('USR-38400','alexander_7947','roxnr-1931');
 INSERT INTO Credentials VALUES ('USR-13319','ava_5556','naexc-1514');
